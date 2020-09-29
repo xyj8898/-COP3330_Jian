@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
+    public static Scanner in =  new Scanner(System.in);
+
     public static void main(String[] args) {
         ArrayList<BodyMassIndex> bmiData = new ArrayList<BodyMassIndex>();
 
@@ -19,20 +21,28 @@ public class App {
     }
 
     public static boolean moreInput(){
-        Scanner in =  new Scanner(System.in);
-        System.out.println("Do you have more input? Please press Y for Yes and N for No.");
-        return in.next().equals("Y");
+        char response;
+        System.out.println("Do you have more input? Please press Y for Yes or a N for No.");
+        response = in.next().charAt(0);
+
+        if (!Character.isLetter(response))
+        {
+            System.out.println("Letters only, please either enter a Y for Yes or a N for No");
+            response = in.next().charAt(0);
+        }
+        response = Character.toUpperCase(response);
+
+        return response == 'Y';
     }
 
     public static double getUserHeight(){
-      Scanner in = new Scanner(System.in);
       double inches;
       System.out.println("Please enter your height in inches: ");
       inches = in.nextDouble();
       in.nextLine();
       while (inches < 0)
       {
-          System.out.println("You've entered a negative number, please enter your height in inches: ");
+          System.out.println("Positive numbers only, please enter your height in inches: ");
           inches = in.nextDouble();
           in.nextLine();
       }
@@ -40,14 +50,13 @@ public class App {
     }
 
     public static double getUserWeight(){
-        Scanner in = new Scanner(System.in);
         double pounds;
         System.out.println("Please enter your weight in pounds: ");
         pounds = in.nextDouble();
         in.nextLine();
         while (pounds < 0)
         {
-            System.out.println("You've entered a negative number, please enter your weight in pounds: ");
+            System.out.println("Positive numbers only, please enter your weight in pounds: ");
             pounds = in.nextDouble();
             in.nextLine();
         }
@@ -55,18 +64,20 @@ public class App {
     }
 
     public static void displayBmiInfo(BodyMassIndex bmi){
-        System.out.printf("User's BMI info: %.1f and category %s\n", bmi.bmiNumber, bmi.category);
+        System.out.printf("User's BMI info: %.1f and BMI Category: %s\n", bmi.bmiNumber, bmi.category);
     }
 
     public static void displayBmiStatistics(ArrayList<BodyMassIndex> bmiData){
         int i, length = bmiData.size();
         double average, sum = 0;
-        for (i = 0; i < length; i++)
+        Object[] arrayOfBMIs = bmiData.toArray();
+
+       for (i = 0; i < length; i++)
         {
-            //sum += (Double) bmiData.get(i);
+            sum += bmiData.get(i).bmiNumber;
         }
+
         average = sum/length;
-        System.out.println("Average BMI: " + average);
+        System.out.printf("Average BMI: %.1f\n", average);
     }
 }
-

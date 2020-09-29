@@ -1,37 +1,39 @@
+
 public class BodyMassIndex {
     double bmiNumber;
-    String category = "";
+    String category;
+
     public BodyMassIndex(double height, double weight) {
         this.bmiNumber = calculateBodyMassIndex(height, weight);
-        this.category = bmiCategory(bmiNumber);
+        this.category = bmiCategory(height, weight);
     }
 
-    public static double calculateBodyMassIndex(double height, double weight) {
+    public double calculateBodyMassIndex(double height, double weight) {
         double BMI;
         BMI = (703.0 * weight) / (height * height);
         return BMI;
     }
 
-    public static String bmiCategory(double bmi){
-        String category = "";
+    public String bmiCategory(double height, double weight){
+        String categoryForBMI;
+        double bmi = calculateBodyMassIndex(height,weight);
+
         if (bmi < 18.5)
         {
-            category = "Underweight";
+            categoryForBMI = "Underweight";
         }
         else if (bmi <= 24.9)
         {
-            category = "Normal weight";
+            categoryForBMI = "Normal weight";
         }
-        else if (bmi >= 25)
+        else if (bmi >= 25 && bmi <= 29.9)
         {
-            if (bmi <= 29.9)
-                category= "Overweight";
+            categoryForBMI = "Overweight";
         }
         else
         {
-            category = "Obese";
+            categoryForBMI = "Obese";
         }
-        return category;
+        return categoryForBMI;
     }
-
 }

@@ -1,31 +1,39 @@
 public class Encrypter
 {
+    Encrypter(){
+    }
+
     public String encrypt(String input)
     {
-        int i;
-        char temp;
+        int i, value;
         String encrypted  = "", ans = "";
 
         for (i = 0; i < 4; i++)
         {
-            encrypted += encryptDigits(input.charAt(i));
+            value = Integer.parseInt(String.valueOf(input.charAt(i)));
+            encrypted += encryptDigits(value);
         }
 
-        ans += encrypted.charAt(2);
-        ans += encrypted.charAt(3);
-        ans += encrypted.charAt(0);
-        ans += encrypted.charAt(1);
-
+        ans = switchDigits(encrypted);
         return ans;
     }
 
     public int encryptDigits (int value)
     {
-        int i;
+        int digit;
+        digit = (value + 7) % 10;
+        return digit;
+    }
 
-        value = ((value + 7) % 10);
+    public String switchDigits(String in){
+        String swappedDigits = "";
 
-        return value;
+        swappedDigits += in.charAt(2);
+        swappedDigits += in.charAt(3);
+        swappedDigits += in.charAt(0);
+        swappedDigits += in.charAt(1);
+
+        return swappedDigits;
     }
 
 }

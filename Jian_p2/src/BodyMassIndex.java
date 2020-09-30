@@ -16,7 +16,7 @@ public class BodyMassIndex {
 
     public String bmiCategory(double height, double weight){
         String categoryForBMI;
-        double bmi = calculateBodyMassIndex(height,weight);
+        double bmi = calculateBodyMassIndex(height, weight);
 
         if (bmi < 18.5)
         {

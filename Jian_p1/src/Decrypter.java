@@ -1,29 +1,34 @@
 public class Decrypter
 {
+    Decrypter(){
+    }
+
     public String decrypt(String input)
     {
-        int i, val;
-        char temp;
+        int i, val, digit;
         String decrypted  = "", ans = "";
 
-        decrypted += input.charAt(2);
-        decrypted += input.charAt(3);
-        decrypted += input.charAt(0);
-        decrypted += input.charAt(1);
+        decrypted = unSwapDigits(input);
 
         for (i = 0; i < 4; i++)
         {
-            val = reverseModulusOperator(decrypted.charAt(i));
-            if (val > 0)
-            {
-                val -= 7;
-                ans += val;
-            }
-            else
-                System.out.println("An error occurred");
+            digit = Integer.parseInt(String.valueOf(decrypted.charAt(i)));
+            val = reverseModulusOperator(digit);
+            ans += subtractSevenFromDigits (val);
         }
 
         return ans;
+    }
+
+    public String unSwapDigits(String in){
+        String unSwappedDigits = "";
+
+        unSwappedDigits += in.charAt(2);
+        unSwappedDigits += in.charAt(3);
+        unSwappedDigits += in.charAt(0);
+        unSwappedDigits += in.charAt(1);
+
+        return unSwappedDigits;
     }
 
     public int reverseModulusOperator(int value)
@@ -49,5 +54,19 @@ public class Decrypter
         if (value == 9)
             return 9;
         return -1;
+    }
+
+    public int subtractSevenFromDigits(int digit){
+        int newDigit;
+        if (digit >= 7)
+        {
+            digit -= 7;
+            return digit;
+        }
+        else
+        {
+            System.out.println("An error occurred");
+            return -1;
+        }
     }
 }

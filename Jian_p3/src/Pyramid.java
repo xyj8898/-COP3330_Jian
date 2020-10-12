@@ -1,7 +1,7 @@
 public class Pyramid extends Shape3D{
     private double length, width, height;
     private String name = "pyramid";
-    private double surfaceArea, term1, radicand1, radicand2, volume;
+    private double surfaceArea, volume;
 
     public Pyramid(double length, double width, double height){
         this.length = length;
@@ -16,6 +16,7 @@ public class Pyramid extends Shape3D{
 
     @Override
     public double getArea(){
+        double radicand1, radicand2;
         // A = lw + l*sqrt((w/2)^2 + h^2) + w
         radicand1 = Math.pow((width/2.0), 2.0) + Math.pow(height, 2.0);
         radicand2 = Math.pow((length/2.0), 2.0) + Math.pow(height, 2.0);

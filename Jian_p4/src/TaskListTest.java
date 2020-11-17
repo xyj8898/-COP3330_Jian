@@ -152,7 +152,7 @@ class TaskListTest {
         TaskList taskList = new TaskList();
         String fileName = "taskList.txt";
         taskList.saveTaskList(fileName);
-        assertEquals(true, taskList.isLoadValid());
+        assertEquals(true, taskList.isLoadValid(fileName));
     }
 
     @Test
@@ -168,6 +168,4 @@ class TaskListTest {
         TaskList taskList = new TaskList();
         assertEquals(false, taskList.changeStatus("uncomplete", index));
     }
-
-
 }

@@ -2,8 +2,10 @@ import java.io.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.FormatterClosedException;
 
 public class TaskList {
     /*
@@ -156,27 +158,24 @@ public class TaskList {
     }
 
     public void saveTaskList(String fileName) {
-        try (OutputStream output = new FileOutputStream(fileName)) {
-            try (Formatter out = new Formatter(fileName)) {
-                for (int i = 0; i < taskList.size(); i++) {
-                    TaskItem task = taskList.get(i);
-                    out.format("%s;%s;%s", task.getTitle(), task.getDescription(), task.getDate());
-                }
-            } catch (FileNotFoundException ex) {
-                System.out.println("WARNING: File not found, cannot save file");
+        try (Formatter out = new Formatter(fileName)) {
+            for (int i = 0; i < taskList.size(); i++) {
+                TaskItem task = taskList.get(i);
+                out.format("%s;%s;%s", task.getTitle(), task.getDescription(), task.getDate());
             }
-        } catch (FileAlreadyExistsException ex) {
-            System.out.println("WARNING: A file with that name already exists, cannot save file");
-        } catch (FileNotFoundException ex) {
+        } catch (SecurityException | FileNotFoundException | FormatterClosedException ex) {
             System.out.println("WARNING: File not found, cannot save file");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    public boolean isLoadValid() {
+    public boolean isLoadValid(String fileName) {
         try {
-            
+            FileReader f = new FileReader(fileName);
+            BufferedReader b = new BufferedReader(f);
+            return true;
+        } catch (IOException ex) {
+            System.out.println("WARNING: File not found, cannot load file");
+            return false;
         }
     }
 }

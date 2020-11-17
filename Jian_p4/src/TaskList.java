@@ -13,15 +13,15 @@ public class TaskList {
     A user shall be able to load an existing task list
      */
     public ArrayList<TaskItem> taskList = new ArrayList<>();
-    public ArrayList<String> taskListValues = new ArrayList<>();
+    //public ArrayList<String> taskListValues = new ArrayList<>();
     String description = "";
     int index = 0;
 
 
     public void addTaskItems(TaskItem task) {
         taskList.add(task);
-        String taskName = task.getTitle();
-        taskListValues.add(taskName);
+        //String taskName = task.getTitle();
+        //taskListValues.add(taskName);
     }
 
     public int getSize() {
@@ -32,18 +32,21 @@ public class TaskList {
     public boolean changeStatus(String status, int index) {
         String taskStatus = "";
         try {
+            TaskItem temp = taskList.get(index);
             if (status.equals("completed")) {
-                taskStatus = "*** " + taskListValues.get(index);
-                taskListValues.remove(index);
-                taskListValues.add(index, taskStatus);
+                taskStatus = "*** " + temp.getTitle();
+                temp.setTitle(taskStatus);
+                taskList.remove(index);
+                taskList.add(index, temp);
                 return true;
             }
             else {
-                taskStatus = taskListValues.get(index);
+                taskStatus = temp.getTitle();
                 if (taskStatus.substring(3).startsWith("*")) {
                     taskStatus = taskStatus.substring(3);
-                    taskListValues.remove(index);
-                    taskListValues.add(index, taskStatus);
+                    taskList.remove(index);
+                    temp.setTitle(taskStatus);
+                    taskList.add(index, temp);
                     return true;
                 }
                 return true;

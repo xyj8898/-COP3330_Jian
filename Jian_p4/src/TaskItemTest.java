@@ -11,8 +11,10 @@ class TaskItemTest {
         TaskItem task = new TaskItem(title, description, date);
         assertEquals("2020-11-03", task.getDate());
     }
+
     @Test
     public void creatingTaskItemFailsWithInvalidDueDate() {
+        date = "";
         TaskItem task = new TaskItem(title, description, date);
         assertEquals("", task.getDate());
     }

@@ -46,18 +46,23 @@ A due date shall be in the format of YYYY-MM-DD
 
     public boolean setDate(String taskDueDate) {
         try {
-            this.dueDate = taskDueDate;
-            return true;
+            if (isValidDate(taskDueDate)) {
+                this.dueDate = taskDueDate;
+                return true;
+            }
         } catch (IllegalArgumentException dueDate) {
             System.out.println("WARNING: invalid due date; task not created");
             return false;
         }
+        return false;
     }
 
     public boolean setTitle(String newTitle) {
         try {
-            this.taskTitle = newTitle;
-            return true;
+            if (isValidTitle(newTitle)) {
+                this.taskTitle = newTitle;
+                return true;
+            }
         } catch (IllegalArgumentException title) {
             System.out.println("WARNING: title must be at least 1 character long; task not created");
             return false;
@@ -65,6 +70,7 @@ A due date shall be in the format of YYYY-MM-DD
             System.out.println("WARNING: title must be at least 1 character long; task not created");
             return false;
         }
+        return false;
     }
 
     public void setDescription(String newDescription) {

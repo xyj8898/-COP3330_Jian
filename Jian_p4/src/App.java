@@ -23,59 +23,78 @@ None of these expected errors should crash the program.
         int input = 0, done = 0;
         String fileName = "";
 
-        try {
+        System.out.println("Main Menu\n" + "---------\n");
+        System.out.println("1) create a new list\n" + "2) load an existing list\n" + "3) quit");
+        input = scan.nextInt();
+        while (input < 0) {
+            System.out.println("Please enter an integer value from 1-3");
             System.out.println("Main Menu\n" + "---------\n");
             System.out.println("1) create a new list\n" + "2) load an existing list\n" + "3) quit");
             input = scan.nextInt();
-            System.out.println("> " + input);
-        } catch (InputMismatchException in) {
-            System.out.println("You must enter in an integer value from 1-3");
         }
+        System.out.println("> " + input);
 
         switch (input) {
             case 1:
                 TaskList taskList = new TaskList();
                 System.out.println("new task list has been created");
+                while (listOperationMenu(taskList) > 0) {
+                    int input2 = listOperationMenu(taskList);
+                    System.out.println("> " + input);
+                    switch (input) {
+                        case 1:
+                            System.out.println("Current Tasks\n" + "-------------\n");
+                            displayCurrentTasks();
+                            break;
+                        case 2:
+                            TaskItem task = new TaskItem();
+
+                            System.out.println("Task title: ");
+                            String title = scan.nextLine();
+                            task.setTitle(title);
+
+                            System.out.println("Task description: ");
+                            String description = scan.nextLine();
+                            task.setDescription(description);
+
+                            System.out.println("Task due date: ");
+                            String dueDate = scan.nextLine();
+                            task.setDate(dueDate);
+
+                            taskList.addTaskItems(task);
+                            break;
+                        case 3:
+                            int choice = 0;
+                            System.out.println("Current Tasks\n" + "-------------\n");
+                            displayCurrentTasks();
+                            System.out.println("Which task will you edit? ");
+                            choice = scan.nextInt();
+                            System.out.println("Enter a new title for task " + choice);
+                            taskList.editTaskItemTitle(choice);
+                            taskList.editTaskItemDescription(choice);
+
+                    }
+                }
                 break;
             case 2:
                 scan.nextLine();
                 System.out.println("Enter the filename to load: ");
                 fileName = scan.nextLine();
-                // load up file
-                System.out.println("task list has been loaded");
+                TaskList taskList1 = new TaskList();
+                if (taskList1.isLoadValid(fileName)) {
+                    System.out.println("task list has been loaded");
+                    break;
+                }
+                System.out.println("WARNING: File could not be loaded");
                 break;
             case 3:
                 System.out.println("Process finished with exit code 0");
                 exit(1);
                 break;
         }
-        while (listOperationMenu() > 0) {
-            System.out.println("> " + listOperationMenu());
-            switch (input) {
-                case 1:
-                    System.out.println("Current Tasks\n" + "-------------\n");
-                    // show current tasks in task list
-                    break;
-                case 2:
-                    TaskItem task = new TaskItem();
+}
 
-                    System.out.println("Task title: ");
-                    String title = scan.nextLine();
-                    task.setTitle(title);
-
-                    System.out.println("Task description: ");
-                    String description = scan.nextLine();
-                    task.setDescription(description);
-
-                    System.out.println("Task due date: ");
-                    String dueDate = scan.nextLine();
-                    task.setDate(dueDate);
-                    break;
-            }
-            listOperationMenu();
-        }
-    }
-    /*public static int listOperationMenu() {
+    private static int listOperationMenu(TaskList taskList) {
         int input = 0;
         try {
             System.out.println("List Operation Menu\n" + "---------\n");
@@ -84,11 +103,24 @@ None of these expected errors should crash the program.
                     "8) quit to the main menu");
             input = scan.nextInt();
             return input;
-            scan.nextLine();
         } catch (InputMismatchException in) {
             System.out.println("You must enter in an integer value from 1-8");
+            return -1;
         }
-    }*/
-}
-catch (FileNotFoundException ex) {
-        System.out.println("Unable to find file");
+    }
+
+    private static void displayCurrentTasks() {
+        TaskList newTaskList = new TaskList();
+        if (newTaskList.isTaskListEmpty(newTaskList)) {
+            System.out.println("\n");
+        }
+        else {
+            int i, size = newTaskList.getSize();
+            for (i = 0; i < size; i++) {
+                String date = newTaskList.getTaskItemDueDate(i);
+                String title = newTaskList.getTaskItemTitle();
+                String descript = newTaskList.getTaskItemDescription();
+                System.out.println("[" +  date + "]" + title + ":" + descript);
+            }
+        }
+    }

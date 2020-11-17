@@ -1,60 +1,58 @@
-import java.io.*;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 
 public class TaskList {
-    /*
-    A user shall be able to create a new task list
-    A user shall be able to load an existing task list
-     */
     public ArrayList<TaskItem> taskList = new ArrayList<>();
-    //public ArrayList<String> taskListValues = new ArrayList<>();
-    String description = "";
-    int index = 0;
-
 
     public void addTaskItems(TaskItem task) {
         taskList.add(task);
-        //String taskName = task.getTitle();
-        //taskListValues.add(taskName);
     }
 
     public int getSize() {
         return taskList.size();
     }
 
-
-    public boolean changeStatus(String status, int index) {
+    public int changeStatus(String status, int index) {
         String taskStatus = "";
         try {
             TaskItem temp = taskList.get(index);
             if (status.equals("completed")) {
-                taskStatus = "*** " + temp.getTitle();
-                temp.setTitle(taskStatus);
-                taskList.remove(index);
-                taskList.add(index, temp);
-                return true;
+                markAsComplete(temp, index);
+                return 1;
             }
             else {
-                taskStatus = temp.getTitle();
-                if (taskStatus.substring(3).startsWith("*")) {
-                    taskStatus = taskStatus.substring(3);
-                    taskList.remove(index);
-                    temp.setTitle(taskStatus);
-                    taskList.add(index, temp);
-                    return true;
-                }
-                return true;
+                markAsUncomplete(temp, index);
+                return 2;
             }
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not change status");
-            return false;
+            return 3;
         }
+    }
+
+    private void markAsUncomplete(TaskItem t, int index) {
+        String taskStatus = t.getTitle();
+        if (taskStatus.startsWith("*")) {
+            taskStatus = taskStatus.substring(3);
+            taskList.remove(index);
+            t.setTitle(taskStatus);
+            taskList.add(index, t);
+        }
+        else {
+            return;
+        }
+    }
+
+    private void markAsComplete(TaskItem t, int index) {
+        String taskStatus = "*** " + t.getTitle();
+        t.setTitle(taskStatus);
+        taskList.remove(index);
+        taskList.add(index, t);
     }
 
     public boolean editTaskItems(String title, String description, String dueDate, int index) {
@@ -69,7 +67,7 @@ public class TaskList {
             TaskItem temp = taskList.get(index);
             temp.setDescription(description);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not edit task");
             return false;
         }
@@ -80,7 +78,7 @@ public class TaskList {
             TaskItem temp = taskList.get(index);
             temp.setDate(date);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not edit task");
             return false;
         }
@@ -91,7 +89,7 @@ public class TaskList {
             TaskItem temp = taskList.get(index);
             temp.setTitle(title);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not edit task");
             return false;
         }
@@ -101,7 +99,7 @@ public class TaskList {
         try {
             String descript = getTaskItemDescription(index);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not get task");
             return false;
         }
@@ -116,7 +114,7 @@ public class TaskList {
         try {
             String date = getTaskItemDueDate(index);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not get task");
             return false;
         }
@@ -132,7 +130,7 @@ public class TaskList {
         try {
             String title = getTaskItemTitle(index);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, could not get task");
             return false;
         }
@@ -154,7 +152,7 @@ public class TaskList {
         try {
             taskList.remove(index);
             return true;
-        } catch (IllegalArgumentException in) {
+        } catch (IndexOutOfBoundsException in) {
             System.out.println("WARNING: invalid index, task not removed");
             return false;
         }
@@ -176,7 +174,7 @@ public class TaskList {
             FileReader f = new FileReader(fileName);
             BufferedReader b = new BufferedReader(f);
             return true;
-        } catch (IOException ex) {
+        } catch (FileNotFoundException ex) {
             System.out.println("WARNING: File not found, cannot load file");
             return false;
         }

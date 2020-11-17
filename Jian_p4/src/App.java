@@ -107,7 +107,7 @@ None of these expected errors should crash the program.
                                 choice = scan.nextInt();
                                 scan.nextLine();
 
-                                if (!taskList.changeStatus("completed", choice)) {
+                                if (taskList.changeStatus("completed", choice) == 1) {
                                     System.out.println("WARNING: Could not mark task as completed");
                                 }
                                 break;
@@ -119,7 +119,7 @@ None of these expected errors should crash the program.
                                 choice = scan.nextInt();
                                 scan.nextLine();
 
-                                if (!taskList.changeStatus("uncomplete", choice)) {
+                                if (taskList.changeStatus("uncomplete", choice) == 2) {
                                     System.out.println("WARNING: Could not mark task as uncomplete");
                                 }
                                 break;

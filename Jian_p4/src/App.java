@@ -206,8 +206,25 @@ None of these expected errors should crash the program.
                                 }
                                 break;
                             case 8:
-                                done = true;
+                                //done = true;
+                                System.out.println("Main Menu\n" + "---------\n");
+                                System.out.println("1) create a new list\n" + "2) load an existing list\n" + "3) quit");
+                                input = scan.nextInt();
+                                scan.nextLine();
+                            if (input == 2) {
+                                System.out.println("Enter the filename to load (example NameOfFile.txt): ");
+                                String fileName = scan.nextLine();
+                                loadedTaskList.loadTaskListFromFile(fileName);
+                                if (loadedTaskList.isLoadValid(loadedTaskList)) {
+                                    System.out.println("task list has been loaded");
+                                    break;
+                                }
+                                System.out.println("WARNING: File could not be loaded");
                                 break;
+                            }
+                            if (input == 3) {
+                                System.exit(0);
+                            }
                             default:
                                 throw new IllegalStateException("Unexpected value: " + input2);
                         }

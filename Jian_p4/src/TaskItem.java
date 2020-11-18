@@ -13,23 +13,6 @@ A due date shall be in the format of YYYY-MM-DD
     public String taskTitle = "", taskDescription = "", dueDate = "";
 
     public TaskItem() {
-
-    }
-
-    public TaskItem(String title, String description, String date) {
-        if (this.setTitle(title)) {
-            this.taskTitle = title;
-        }
-        else {
-            this.taskTitle = "";
-        }
-        this.taskDescription = description;
-        if (this.setDate(date)) {
-            this.dueDate = date;
-        }
-        else {
-            this.dueDate = "";
-        }
     }
 
     public String getDate() {
@@ -45,32 +28,19 @@ A due date shall be in the format of YYYY-MM-DD
     }
 
     public boolean setDate(String taskDueDate) {
-        try {
-            if (isValidDate(taskDueDate)) {
-                this.dueDate = taskDueDate;
-                return true;
-            }
-        } catch (IllegalArgumentException dueDate) {
-            System.out.println("WARNING: invalid due date; task not created");
-            return false;
-        }
-        return false;
+       if (isValidDate(taskDueDate)) {
+           this.dueDate = taskDueDate;
+           return true;
+       }
+       return false;
     }
 
     public boolean setTitle(String newTitle) {
-        try {
-            if (isValidTitle(newTitle)) {
-                this.taskTitle = newTitle;
-                return true;
-            }
-        } catch (IllegalArgumentException title) {
-            System.out.println("WARNING: title must be at least 1 character long; task not created");
-            return false;
-        } catch (InputMismatchException title) {
-            System.out.println("WARNING: title must be at least 1 character long; task not created");
-            return false;
-        }
-        return false;
+       if (isValidTitle(newTitle)) {
+           this.taskTitle = newTitle;
+           return true;
+       }
+       return false;
     }
 
     public void setDescription(String newDescription) {
@@ -78,7 +48,59 @@ A due date shall be in the format of YYYY-MM-DD
     }
 
     public boolean isValidDate(String date) {
-        return date.length() == 10;
+        if (date.length() == 10) {
+            if (date.charAt(4) != '-') {
+                return false;
+            }
+            if (date.charAt(7) != '-') {
+                return false;
+            }
+
+            String year = date.substring(0, 4);
+            int isValidYear = Integer.parseInt(year);
+            String month = date.substring(5, 7);
+            int validMonth = Integer.parseInt(month);
+            String day = date.substring(8);
+            int validDay = Integer.parseInt(day);
+
+            return isValidMonth(validMonth, validDay, isValidYear, day);
+        }
+        return false;
+    }
+
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+    }
+
+    private boolean isValidMonth(int month, int validDay, int isValidYear, String day) {
+        if (month > 0 && month <= 12) {
+            if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                if (day.length() == 2) {
+                    return validDay >= 1 && validDay <= 31;
+                }
+                return false;
+            }
+            else if (month == 4 || month == 6 || month == 9 || month == 11) {
+                if (day.length() == 2) {
+                    return validDay >= 1 && validDay <= 30;
+                }
+                return false;
+            }
+            else {
+                if (isLeapYear(isValidYear)) {
+                    if (day.length() == 2) {
+                        return validDay >= 1 && validDay <= 29;
+                    }
+                }
+                else {
+                    if (day.length() == 2) {
+                        return validDay >= 1 && validDay <= 28;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
     }
 
     public boolean isValidTitle(String title) {

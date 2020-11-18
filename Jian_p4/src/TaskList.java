@@ -1,16 +1,19 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.FormatterClosedException;
 
 public class TaskList {
-    public ArrayList<TaskItem> taskList = new ArrayList<>();
+    ArrayList<TaskItem> taskList;
+
+    public TaskList(){
+        taskList = new ArrayList<>();
+    }
 
     public void addTaskItems(TaskItem task) {
         taskList.add(task);
+    }
+
+    public TaskItem get(int index) {
+        return taskList.get(index);
     }
 
     public int getSize() {
@@ -18,7 +21,6 @@ public class TaskList {
     }
 
     public int changeStatus(String status, int index) {
-        String taskStatus = "";
         try {
             TaskItem temp = taskList.get(index);
             if (status.equals("completed")) {
@@ -56,21 +58,30 @@ public class TaskList {
     }
 
     public boolean editTaskItems(String title, String description, String dueDate, int index) {
+        if (!isIndexValid(taskList, index)) {
+            return false;
+        }
         if (editTaskItemTitle(title, index) && editTaskItemDueDate(dueDate, index) && editTaskItemDescription(description, index)) {
             return true;
         }
         return false;
     }
 
+    private boolean isIndexValid (ArrayList<TaskItem> taskList, int index) {
+        int maxValidIndex = taskList.size() - 1;
+        if (index >= 0 && index <= maxValidIndex) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean editTaskItemDescription(String description, int index) {
-        try {
+        if (isIndexValid(taskList, index)) {
             TaskItem temp = taskList.get(index);
             temp.setDescription(description);
             return true;
-        } catch (IndexOutOfBoundsException in) {
-            System.out.println("WARNING: invalid index, could not edit task");
-            return false;
         }
+        return false;
     }
 
     public boolean editTaskItemDueDate(String date, int index) {
@@ -159,24 +170,80 @@ public class TaskList {
     }
 
     public void saveTaskList(String fileName) {
-        try (Formatter out = new Formatter(fileName)) {
-            for (int i = 0; i < taskList.size(); i++) {
-                TaskItem task = taskList.get(i);
-                out.format("%s;%s;%s", task.getTitle(), task.getDescription(), task.getDate());
+        FileWriter saveFile = isCreateFileValid(fileName);
+        try (PrintWriter printWriter = new PrintWriter(saveFile)) {
+            int i, size = taskList.size();
+                for (i = 0; i < size; i++) {
+                    TaskItem task = taskList.get(i);
+                    printWriter.printf("%d) %s: %s: %s\n", i, task.getTitle(), task.getDescription(), task.getDate());
             }
-        } catch (SecurityException | FileNotFoundException | FormatterClosedException ex) {
-            System.out.println("WARNING: File not found, cannot save file");
+                printWriter.close();
+        } catch (Exception ex) {
+            System.out.println("WARNING: Unexpected error, could not save file");
         }
     }
 
-    public boolean isLoadValid(String fileName) {
-        try {
-            FileReader f = new FileReader(fileName);
-            BufferedReader b = new BufferedReader(f);
+    private FileWriter isCreateFileValid(String fileName) {
+        try{
+            FileWriter saveTaskListToFile = new FileWriter(fileName);
+            return saveTaskListToFile;
+        } catch(IOException ex) {
+            System.out.println("WARNING: Could not save file");
+        }
+        return null;
+    }
+
+    public boolean isLoadValid(TaskList taskList) {
+        int size = 0;
+        size = taskList.getSize();
+        if (size >= 0) {
             return true;
+        }
+        return false;
+    }
+
+    public TaskList loadTaskListFromFile(String fileName) {
+        TaskList taskListFromFile = new TaskList();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            TaskItem task = new TaskItem();
+            String line;
+            int i = 0, descriptStartingIndex;
+            while ((line = reader.readLine()) != null)
+            {
+                while (line.charAt(i) != ':') {
+                    if  (i > line.length()) {
+                        i++;
+                    }
+                    break;
+            }
+                task.setTitle(line.substring(3,i));
+                descriptStartingIndex = i;
+                while (line.charAt(i) != ':') {
+                    if  (i > line.length()) {
+                        i++;
+                    }
+                    break;
+                }
+                task.setDescription(line.substring(descriptStartingIndex, i));
+                int dateStartingIndex = i;
+                while (line.charAt(i) != ']') {
+                    if  (i > line.length()) {
+                        i++;
+                    }
+                    break;
+                }
+                task.setDate(line.substring(dateStartingIndex, i));
+                taskListFromFile.addTaskItems(task);
+            }
+            reader.close();
+            return taskListFromFile;
         } catch (FileNotFoundException ex) {
-            System.out.println("WARNING: File not found, cannot load file");
-            return false;
+            System.out.println("WARNING: Could not find file to read");
+            return null;
+        } catch (IOException e) {
+            System.out.println("WARNING: Unexpected error could not close file");
+            return null;
         }
     }
 }

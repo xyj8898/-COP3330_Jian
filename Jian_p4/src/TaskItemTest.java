@@ -1,57 +1,52 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TaskItemTest {
+public class TaskItemTest {
     private String title = "t";
     private String description = "";
     private String date = "2020-11-03";
+    private TaskItem task = new TaskItem();
 
     @Test
     public void creatingTaskItemSucceedsWithValidDueDate() {
-        TaskItem task = new TaskItem(title, description, date);
-        assertEquals("2020-11-03", task.getDate());
+        System.out.println(date.length());
+        assertEquals(true, task.setDate(date));
     }
 
     @Test
     public void creatingTaskItemFailsWithInvalidDueDate() {
-        date = "";
-        TaskItem task = new TaskItem(title, description, date);
-        assertEquals("", task.getDate());
+        date = "202-22-333";
+        assertEquals(false, task.setDate(date));
     }
 
     @Test
     public void creatingTaskItemSucceedsWithValidTitle() {
-        TaskItem task = new TaskItem(title, description, date);
-        assertEquals("t", task.getTitle());
+        assertEquals(true, task.setTitle(title));
     }
 
     @Test
     public void creatingTaskItemFailsWithInvalidTitle() {
-        TaskItem task = new TaskItem();
-        assertEquals("", task.getTitle());
+        title = "";
+        assertEquals(false, task.setTitle(title));
     }
 
     @Test
     public void settingTaskItemDueDateSucceedsWithValidDate() {
-        TaskItem task = new TaskItem();
         assertEquals(true, task.setDate("2020-11-03"));
     }
 
     @Test
     public void settingTaskItemDueDateFailsWithInvalidDate() {
-        TaskItem task = new TaskItem();
         assertEquals(false, task.setDate("11-03"));
     }
 
     @Test
     public void settingTaskItemTitleSucceedsWithValidTitle() {
-        TaskItem task = new TaskItem();
         assertEquals(true, task.setTitle("t"));
     }
 
     @Test
     public void settingTaskItemTitleFailsWithInvalidTitle() {
-        TaskItem task = new TaskItem();
         assertEquals(false, task.setTitle(""));
     }
 }

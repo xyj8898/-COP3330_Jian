@@ -154,7 +154,8 @@ public class TaskListTest {
         taskListItems.addTaskItems(task);
         String fileName = "taskList.txt";
         taskListItems.saveTaskList(fileName);
-        assertEquals(true, taskListItems.isLoadValid(fileName));
+        TaskList newTaskList = taskListItems.loadTaskListFromFile(fileName);
+        assertEquals(true, newTaskList.isLoadValid(newTaskList));
     }
 
     @Test

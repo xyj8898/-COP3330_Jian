@@ -4,15 +4,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class ContactList {
-    /*
-    A user shall be able to create a new contact list
-A user shall be able to load an existing contact list
-A user shall be able to view the current contact list
-A user shall be able to save the current contact list
-A user shall be able to add a contact to the current contact list
-A user shall be able to edit a contact in the current contact list
-A user shall be able to remove a contact from the current contact list
-     */
     private List<ContactItem> contacts;
 
     public ContactList() {
@@ -54,7 +45,7 @@ A user shall be able to remove a contact from the current contact list
             output.format("tasks%n");
             for (ContactItem contact : contacts) {
                 output.format("%s%n", contact.getFirstname());
-                output.format(" %s%n", contact.getLastname());
+                output.format("%s%n", contact.getLastname());
                 output.format("%s%n", contact.getPhonenumber());
                 output.format("%s%n", contact.getEmailaddress());
             }
@@ -82,14 +73,14 @@ A user shall be able to remove a contact from the current contact list
             }
             else {
                 contacts = backupList;
-                throw new InputMismatchException("WARNING: Filename is a not a valid task list. No data loaded");
+                throw new InputMismatchException("WARNING: Filename is a not a valid contact list. No data loaded");
             }
         } catch (FileNotFoundException e) {
             contacts = backupList;
-            throw new IllegalArgumentException("WARNING: Task file not found. No task list loaded");
+            throw new IllegalArgumentException("WARNING: Contact file not found. No contact list loaded");
         } catch (IOException e) {
             contacts = backupList;
-            throw new IllegalArgumentException("WARNING: Error loading the file. No task list loaded");
+            throw new IllegalArgumentException("WARNING: Error loading the file. No contact list loaded");
         }
     }
 
@@ -109,7 +100,7 @@ A user shall be able to remove a contact from the current contact list
         return this.get(index).getEmailaddress();
     }
 
-    public String getTaskText(int index) {
+    public String getContactText(int index) {
         return this.get(index).toString();
     }
 }

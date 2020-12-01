@@ -125,7 +125,7 @@ public class ContactApp extends App {
     private void editItem() {
         displayCurrentItems();
 
-        System.out.println("Which task will you edit? ");
+        System.out.println("Which contact will you edit? ");
         int index = scan.nextInt();
         scan.nextLine();
 

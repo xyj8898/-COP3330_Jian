@@ -5,11 +5,6 @@ public class ContactApp extends App {
     private static final Scanner scan = new Scanner(System.in);
     private ContactList contactList;
 
-    /*public static void main(String[] args) {
-        ContactApp contactApp = new ContactApp();
-        contactApp.run();
-    }*/
-
     @Override
     public void run() {
         String choiceFromMainMenu;

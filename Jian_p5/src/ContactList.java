@@ -42,7 +42,7 @@ public class ContactList {
 
     public void save(String fileName) {
         try (Formatter output = new Formatter(fileName)) {
-            output.format("tasks%n");
+            output.format("contacts%n");
             for (ContactItem contact : contacts) {
                 output.format("%s%n", contact.getFirstname());
                 output.format("%s%n", contact.getLastname());

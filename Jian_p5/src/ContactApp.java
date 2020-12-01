@@ -3,12 +3,12 @@ import java.util.Scanner;
 
 public class ContactApp extends App {
     private static final Scanner scan = new Scanner(System.in);
-    private TaskList taskList;
+    private ContactList contactList;
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         ContactApp contactApp = new ContactApp();
         contactApp.run();
-    }
+    }*/
 
     @Override
     public void run() {
@@ -46,62 +46,48 @@ public class ContactApp extends App {
     }
 
     private void createList() {
-        // create a new task list
-        taskList = new TaskList();
-        System.out.println("new task list has been created");
+        // create a new contact list
+        contactList = new ContactList();
+        System.out.println("new contact list has been created");
     }
 
     private void loadList() {
         System.out.println("Enter the filename to load: ");
         String fileName = scan.nextLine();
 
-        taskList = new TaskList();
-        taskList.load(fileName);
+        contactList = new ContactList();
+        contactList.load(fileName);
     }
 
     private void modifyList() {
-        String choiceFromTaskMenu;
+        String choiceFromContactMenu;
         while (true) {
             displayOperationMenu();
-            choiceFromTaskMenu = getMenuChoice();
+            choiceFromContactMenu = getMenuChoice();
 
-            if (choiceFromTaskMenu.contains("1") || choiceFromTaskMenu.contains("view")) {
+            if (choiceFromContactMenu.contains("1") || choiceFromContactMenu.contains("view")) {
                 displayCurrentItems();
-            } else if (choiceFromTaskMenu.contains("2") || choiceFromTaskMenu.contains("add")) {
+            } else if (choiceFromContactMenu.contains("2") || choiceFromContactMenu.contains("add")) {
                 addItems();
-            } else if (choiceFromTaskMenu.contains("3") || choiceFromTaskMenu.contains("edit")) {
-                if (taskList.size() > 0) {
+            } else if (choiceFromContactMenu.contains("3") || choiceFromContactMenu.contains("edit")) {
+                if (contactList.size() > 0) {
                     editItem();
                 } else {
-                    System.out.println("No tasks to edit");
+                    System.out.println("No contacts to edit");
                 }
-            } else if (choiceFromTaskMenu.contains("4") || choiceFromTaskMenu.contains("remove")) {
-                if (taskList.size() > 0) {
+            } else if (choiceFromContactMenu.contains("4") || choiceFromContactMenu.contains("remove")) {
+                if (contactList.size() > 0) {
                     removeItem();
                 } else {
-                    System.out.println("No tasks to remove");
+                    System.out.println("No contacts to remove");
                 }
-            } else if (choiceFromTaskMenu.contains("5") || choiceFromTaskMenu.contains("mark")) {
-                if (taskList.size() > 0) {
-                    markItem();
-                    displayCompletedItems();
-                } else {
-                    System.out.println("No tasks to mark as complete");
-                }
-            } else if (choiceFromTaskMenu.contains("6") || choiceFromTaskMenu.contains("unmark")) {
-                if (taskList.size() > 0) {
-                    unmarkItem();
-                    displayUncompletedItems();
-                } else {
-                    System.out.println("No tasks to unmark as uncomplete");
-                }
-            } else if (choiceFromTaskMenu.contains("7") || choiceFromTaskMenu.contains("save")) {
-                if (taskList.size() > 0) {
+            } else if (choiceFromContactMenu.contains("5") || choiceFromContactMenu.contains("save")) {
+                if (contactList.size() > 0) {
                     saveItems();
                 } else {
-                    System.out.println("No tasks to save");
+                    System.out.println("No contacts to save");
                 }
-            } else if (choiceFromTaskMenu.contains("8") || choiceFromTaskMenu.contains("quit")) {
+            } else if (choiceFromContactMenu.contains("6") || choiceFromContactMenu.contains("quit")) {
                 break;
             } else {
                 System.out.println("Invalid menu option.");
@@ -112,28 +98,30 @@ public class ContactApp extends App {
     private void displayOperationMenu() {
         System.out.println("\nList Operation Menu\n" + "---------\n");
         System.out.println("1) view the list\n" + "2) add an item\n" + "3) edit an item\n" + "4) remove an item\n" +
-                "5) mark an item as completed\n" + "6) unmark an item as completed\n" + "7) save the current list\n" +
-                "8) quit to the main menu");
+                "5) save the current list\n" + "6) quit to the main menu");
     }
 
     private void displayCurrentItems() {
-        System.out.println("Current Tasks\n" + "-------------\n");
-        System.out.println(taskList.view());
+        System.out.println("Current Contacts\n" + "-------------\n");
+        System.out.println(contactList.view());
         System.out.println();
     }
 
     private void addItems() {
-        System.out.println("Task title: ");
-        String title = scan.nextLine();
+        System.out.println("First name: ");
+        String firstname = scan.nextLine();
 
-        System.out.println("Task description: ");
-        String description = scan.nextLine();
+        System.out.println("Last name: ");
+        String lastname = scan.nextLine();
 
-        System.out.println("Task due date (YYYY-MM-DD): ");
-        String dueDate = scan.nextLine();
+        System.out.println("Phone number (xxx-xxx-xxxx): ");
+        String phonenumber = scan.nextLine();
+
+        System.out.println("Email address (x@y.z): ");
+        String emailaddress = scan.nextLine();
 
         try {
-            taskList.add(new TaskItem(title, description, dueDate));
+            contactList.add(new ContactItem(firstname, lastname, phonenumber, emailaddress));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -146,94 +134,53 @@ public class ContactApp extends App {
         int index = scan.nextInt();
         scan.nextLine();
 
-        if (index < taskList.size()) {
-            System.out.println("Enter a new title for task " + index);
-            String title = scan.nextLine();
+        if (index < contactList.size()) {
+            System.out.println("Enter a new first name: ");
+            String firstname = scan.nextLine();
 
-            System.out.println("Enter a new description for task " + index);
-            String description = scan.nextLine();
+            System.out.println("Enter a new last name: ");
+            String lastname = scan.nextLine();
 
-            System.out.println("Enter a new task due date");
-            String dueDate = scan.nextLine();
+            System.out.println("Enter a new phone number (xxx-xxx-xxxx): ");
+            String phonenumber = scan.nextLine();
+
+            System.out.println("Enter a new email address (x@y.z): ");
+            String emailaddress = scan.nextLine();
 
             try {
-                taskList.update(index, title, description, dueDate);
+                contactList.update(index, firstname, lastname, phonenumber, emailaddress);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         } else {
-            System.out.println("WARNING: Invalid task number");
+            System.out.println("WARNING: Invalid contact number");
         }
     }
 
     private void removeItem() {
         displayCurrentItems();
 
-        System.out.println("Which task will you remove? ");
+        System.out.println("Which contact will you remove? ");
         int index = scan.nextInt();
         scan.nextLine();
 
-        if (index < taskList.size()) {
-            taskList.remove(index);
+        if (index < contactList.size()) {
+            contactList.remove(index);
         } else {
-            System.out.println("WARNING: Invalid task number");
+            System.out.println("WARNING: Invalid contact number");
         }
-    }
-
-    private void markItem() {
-        displayCurrentItems();
-
-        System.out.println("Which task will you mark as completed? ");
-        int index = scan.nextInt();
-        scan.nextLine();
-
-        if (index >= taskList.size()) {
-            System.out.println("WARNING: Invalid task number");
-        } else if (taskList.isTaskComplete(index)) {
-            System.out.println("WARNING: Task is already complete. No changes made");
-        } else {
-            taskList.complete(index, true);
-        }
-    }
-
-    private void displayCompletedItems() {
-        System.out.println("Completed Tasks\n" + "-------------\n");
-        System.out.println(taskList.viewCompletedTasks());
-        System.out.println();
-    }
-
-    private void unmarkItem() {
-        displayCurrentItems();
-
-        System.out.println("Which task will you unmark as completed? ");
-        int index = scan.nextInt();
-        scan.nextLine();
-
-        if (index >= taskList.size()) {
-            System.out.println("WARNING: Invalid task number");
-        } else if (!taskList.isTaskComplete(index)) {
-            System.out.println("WARNING: Task is already incomplete. No changes made");
-        } else {
-            taskList.complete(index, false);
-        }
-    }
-
-    private void displayUncompletedItems() {
-        System.out.println("Uncompleted Tasks\n" + "-------------\n");
-        System.out.println(taskList.viewUncompletedTasks());
-        System.out.println();
     }
 
     private void saveItems() {
-        if (taskList.size() > 0) {
+        if (contactList.size() > 0) {
             System.out.println("Enter the filename to save as: ");
             String nameOfFile = scan.nextLine();
-            taskList.save(nameOfFile);
+            contactList.save(nameOfFile);
 
-            System.out.println("Task list has been saved");
+            System.out.println("Contact list has been saved");
         }
         else {
-            System.out.println("No tasks to save");
+            System.out.println("No contacts to save");
         }
     }
 }

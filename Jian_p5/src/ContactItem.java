@@ -40,6 +40,10 @@ public class ContactItem {
 
     @Override
     public String toString() {
-        return String.format("Name: %s %s%n Phone: %s%n Email: %s%n", firstname, lastname, phonenumber, emailaddress);
+        String name = String.format("Name: %s %s,", firstname, lastname);
+        String phone = String.format(" Phone: %s,", phonenumber);
+        String email = String.format(" Email: %s", emailaddress);
+        String contact = name + phone + email;
+        return contact;
     }
 }

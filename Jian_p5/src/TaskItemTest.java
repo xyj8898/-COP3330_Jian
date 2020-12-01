@@ -2,10 +2,6 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskItemTest {
-    private String title = "t";
-    private String description = "";
-    private String date = "2020-11-03";
-
     @Test
     public void constructorSucceedsWithValidDueDate() {
         TaskItem t = new TaskItem("Task 1", "My first task", "2020-12-01");

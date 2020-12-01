@@ -5,10 +5,10 @@ public class TaskApp extends App {
     private static final Scanner scan = new Scanner(System.in);
     private TaskList taskList;
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         TaskApp taskApp = new TaskApp();
         taskApp.run();
-    }
+    }*/
 
     @Override
     public void run() {
